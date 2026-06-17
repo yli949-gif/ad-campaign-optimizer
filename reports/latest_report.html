@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic Advertising — Run Report</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#ffffff; --ink:#1d2433; --muted:#6b7280; --line:#e6e8ec;
+  --brand:#3b5bdb; --ok:#15803d; --okbg:#e7f6ec; --warn:#b45309; --warnbg:#fdf3e3;
+  --block:#9333ea; --blockbg:#f5ecfd; --bad:#b91c1c; --good:#15803d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+.wrap{max-width:920px;margin:0 auto;padding:32px 20px 64px;}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
+  border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:8px;}
+h1{font-size:24px;margin:0;letter-spacing:-.2px;}
+h2{font-size:17px;margin:36px 0 12px;letter-spacing:-.1px;}
+.sub{color:var(--muted);font-size:13px;margin-top:4px;}
+.banner{background:#fff8e1;border:1px solid #f3e2a8;color:#7a5b00;
+  border-radius:10px;padding:10px 14px;font-size:13px;margin:18px 0 4px;}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:6px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;}
+.card .label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.4px;}
+.card .val{font-size:22px;font-weight:650;margin-top:6px;letter-spacing:-.3px;}
+.card .val.good{color:var(--good)} .card .val.bad{color:var(--bad)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;margin-top:12px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.kpi{font-size:28px;font-weight:700;letter-spacing:-.4px;}
+.kpi.warn{color:var(--warn)}
+table{width:100%;border-collapse:collapse;margin-top:6px;font-size:14px;}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.3px;}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;}
+.pill.google{background:#e8f0fe;color:#1a56db} .pill.meta{background:#e7ecff;color:#3b39d6}
+.pill.linkedin{background:#e3f0f7;color:#0a66c2}
+.group{border-radius:12px;border:1px solid var(--line);overflow:hidden;margin-top:14px;}
+.group>.gh{padding:11px 16px;font-weight:650;display:flex;align-items:center;gap:10px;}
+.gh.ok{background:var(--okbg);color:var(--ok)} .gh.warn{background:var(--warnbg);color:var(--warn)}
+.gh.block{background:var(--blockbg);color:var(--block)} .gh.muted{background:#eef0f3;color:var(--muted)}
+.gh .count{margin-left:auto;font-weight:600;font-size:13px;opacity:.8}
+.gh .hint{font-weight:400;font-size:12px;color:var(--muted)}
+.act{padding:12px 16px;border-top:1px solid var(--line);}
+.act:first-of-type{border-top:none}
+.act .top{display:flex;justify-content:space-between;gap:12px;align-items:baseline;}
+.act .name{font-weight:600}
+.act .move{font-variant-numeric:tabular-nums;color:var(--ink);font-size:13px;
+  background:#f1f3f6;border-radius:6px;padding:1px 8px;}
+.act .why{color:var(--muted);font-size:13px;margin-top:4px;}
+.conf{font-size:12px;color:var(--muted);white-space:nowrap}
+.bar{display:inline-block;width:46px;height:6px;border-radius:4px;background:#e6e8ec;
+  vertical-align:middle;margin-left:6px;overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--brand)}
+.rails{list-style:none;padding:0;margin:6px 0 0;}
+.rails li{padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;}
+.rails li:last-child{border-bottom:none}
+.rails b{color:var(--ink)}
+.creative{margin-top:12px}
+.creative .ch{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-weight:600}
+.chips{display:flex;flex-direction:column;gap:5px}
+.chips .h{background:#f1f3f6;border-radius:6px;padding:6px 10px;font-size:13px;}
+.cf{display:flex;gap:10px;align-items:baseline}
+.cflabel{min-width:104px;color:var(--muted);font-size:12px;text-transform:uppercase;
+  letter-spacing:.3px;flex:0 0 104px;padding-top:6px}
+.cf .h{flex:1}
+.whyrow td{border-bottom:1px solid var(--line);padding-top:0;padding-bottom:10px}
+.whyrow .why{color:var(--muted);font-size:13px}
+.mcp{counter-reset:step}
+.mcp .row{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.mcp .row:last-child{border-bottom:none}
+.mcp .k{font-weight:600;min-width:190px}
+.mcp .v{color:var(--muted);font-size:14px}
+.foot{color:var(--muted);font-size:12px;margin-top:34px;border-top:1px solid var(--line);padding-top:14px}
+code{background:#eef0f3;border-radius:5px;padding:1px 5px;font-size:13px}
+</style></head>
+<body><div class="wrap">
+
+  <div class="head">
+    <div>
+      <h1>Agentic Advertising — Run Report</h1>
+      <div class="sub">Autonomy mode: <b>assist</b> &nbsp;·&nbsp;
+        Lookback: <b>14 days</b> &nbsp;·&nbsp; Generated Jun 16, 2026 · 23:55</div>
+    </div>
+    <div class="sub">Goals: CPA ≤ $30 · ROAS ≥ 3.0×</div>
+  </div>
+
+  <div class="banner">⚠ <b>Illustrative MVP.</b> All figures below are generated from
+  <b>simulated data</b> for demonstration. They are estimates that show how the agent
+  reasons — not results from a real ad account.</div>
+
+  <h2>Account summary</h2>
+  
+    <div class="cards">
+      <div class="card"><div class="label">Total spend</div><div class="val">$9,007</div></div>
+      <div class="card"><div class="label">Revenue</div><div class="val">$32,241</div></div>
+      <div class="card"><div class="label">Conversions</div><div class="val">265</div></div>
+      <div class="card"><div class="label">Avg CPA</div><div class="val bad">$33.96</div></div>
+      <div class="card"><div class="label">Avg ROAS</div><div class="val good">3.6×</div></div>
+    </div>
+
+  <h2>Efficiency opportunity <span class="sub">(estimated, illustrative)</span></h2>
+  <div class="panel two">
+    <div>
+      <div class="sub">Spend above CPA target on under-performing campaigns</div>
+      <div class="kpi warn">~$2,842</div>
+      <div class="sub">Estimated portion of spend that exceeded the $30
+      CPA goal over this window. A rough indication of where efficiency could improve —
+      not a guaranteed saving.</div>
+    </div>
+    <div>
+      <div class="sub">Daily budget the agent proposes to reallocate</div>
+      <div class="kpi">~$160<span class="sub" style="font-size:14px">/day</span></div>
+      <div class="sub">Freed by trimming over-target campaigns and flagging the worst
+      performer to pause. Intended to move toward better-performing campaigns.</div>
+    </div>
+  </div>
+
+  <h2>Campaign audit</h2>
+  <div class="panel">
+  <table>
+    <thead><tr><th>Campaign</th><th>Platform</th><th class="num">Spend</th>
+    <th class="num">Conv.</th><th class="num">CPA</th><th class="num">ROAS</th></tr></thead>
+    <tbody><tr><td>Prospecting — Lookalike 1%</td><td><span class='pill meta'>meta</span></td><td class='num'>$1,875.06</td><td class='num'>42.0</td><td class='num' style='color:var(--bad)'>$44.70</td><td class='num' style='color:var(--bad)'>2.2×</td></tr>
+<tr><td>Performance Max — Catalog</td><td><span class='pill google'>google</span></td><td class='num'>$1,510.25</td><td class='num'>70.1</td><td class='num' style='color:var(--good)'>$21.54</td><td class='num' style='color:var(--good)'>6.6×</td></tr>
+<tr><td>Leads — VP Marketing ABM</td><td><span class='pill linkedin'>linkedin</span></td><td class='num'>$1,050.04</td><td class='num'>1.4</td><td class='num' style='color:var(--bad)'>$760.90</td><td class='num' style='color:var(--bad)'>1.2×</td></tr>
+<tr><td>Awareness — Reels Video</td><td><span class='pill meta'>meta</span></td><td class='num'>$1,002.93</td><td class='num'>12.1</td><td class='num' style='color:var(--bad)'>$83.16</td><td class='num' style='color:var(--bad)'>1.1×</td></tr>
+<tr><td>Search — Nonbrand</td><td><span class='pill google'>google</span></td><td class='num'>$880.12</td><td class='num'>27.1</td><td class='num' style='color:var(--bad)'>$32.44</td><td class='num' style='color:var(--good)'>3.6×</td></tr>
+<tr><td>Prospecting — Broad (new creative)</td><td><span class='pill meta'>meta</span></td><td class='num'>$863.26</td><td class='num'>0.0</td><td class='num' style='color:var(--good)'>—</td><td class='num' style='color:var(--bad)'>0.0×</td></tr>
+<tr><td>Search — Competitor</td><td><span class='pill google'>google</span></td><td class='num'>$710.60</td><td class='num'>6.7</td><td class='num' style='color:var(--bad)'>$106.22</td><td class='num' style='color:var(--bad)'>1.1×</td></tr>
+<tr><td>Retargeting — 30d Site</td><td><span class='pill meta'>meta</span></td><td class='num'>$619.05</td><td class='num'>60.5</td><td class='num' style='color:var(--good)'>$10.23</td><td class='num' style='color:var(--good)'>10.8×</td></tr>
+<tr><td>Search — Brand</td><td><span class='pill google'>google</span></td><td class='num'>$495.93</td><td class='num'>45.4</td><td class='num' style='color:var(--good)'>$10.93</td><td class='num' style='color:var(--good)'>10.7×</td></tr></tbody>
+  </table>
+  </div>
+
+  <h2>Recommended actions <span class="sub">(5 applied · 2 awaiting approval)</span></h2>
+  <div class='group'><div class='gh ok'>Auto-applied<span class='hint'>These low-risk changes were applied automatically.</span><span class='count'>5</span></div><div class='act'><div class='top'><span class='name'>Search — Brand</span><span><span class='move'>$40.00 → $50.00</span> <span class="conf">80%<span class="bar"><span style="width:80%"></span></span></span></span></div><div class='why'>CPA $10.93 beats target and ROAS 10.7 is healthy. Scale to capture more volume.</div></div><div class='act'><div class='top'><span class='name'>Performance Max — Catalog</span><span><span class='move'>$120.00 → $150.00</span> <span class="conf">80%<span class="bar"><span style="width:80%"></span></span></span></span></div><div class='why'>CPA $21.54 beats target and ROAS 6.6 is healthy. Scale to capture more volume.</div></div><div class='act'><div class='top'><span class='name'>Prospecting — Lookalike 1%</span><span><span class='move'>$150.00 → $120.00</span> <span class="conf">70%<span class="bar"><span style="width:70%"></span></span></span></span></div><div class='why'>CPA $44.70 is above the $30.00 target. Trim spend to protect efficiency.</div></div><div class='act'><div class='top'><span class='name'>Retargeting — 30d Site</span><span><span class='move'>$50.00 → $62.50</span> <span class="conf">80%<span class="bar"><span style="width:80%"></span></span></span></span></div><div class='why'>CPA $10.23 beats target and ROAS 10.8 is healthy. Scale to capture more volume.</div></div><div class='act'><div class='top'><span class='name'>Search — Nonbrand</span><span><span class='move'>$22.00 → $27.22</span> <span class="conf">60%<span class="bar"><span style="width:60%"></span></span></span></span></div><div class='why'>Realised CPA $32.44 has drifted 47% from the tCPA $22.00 setting. Recentre the target rather than cut spend.</div></div></div>
+<div class='group'><div class='gh warn'>Needs your approval<span class='hint'>Higher-impact moves held for a human to confirm.</span><span class='count'>2</span></div><div class='act'><div class='top'><span class='name'>Search — Competitor</span><span><span class='move'>enabled → paused</span> <span class="conf">85%<span class="bar"><span style="width:85%"></span></span></span></span></div><div class='why'>CPA $106.22 is 3.5× target and ROAS 1.1 is far below 3.0. Pause and rework before it spends more.</div></div><div class='act'><div class='top'><span class='name'>Prospecting — Broad (new creative)</span><span><span class='move'>enabled → paused</span> <span class="conf">85%<span class="bar"><span style="width:85%"></span></span></span></span></div><div class='why'>Spent $863.26 over 14d with zero conversions. Treat as a money-loser — pause and rework before it spends more.</div></div></div>
+<div class='group'><div class='gh muted'>Hold / No action<span class='hint'>Intentionally left unchanged — see the reason on each.</span><span class='count'>2</span></div><div class='act'><div class='top'><span class='name'>Awareness — Reels Video</span><span> <span class="conf">60%<span class="bar"><span style="width:60%"></span></span></span></span></div><div class='why'>Awareness objective — steering by reach/CPM, outside this conversion optimizer&#x27;s scope.</div></div><div class='act'><div class='top'><span class='name'>Leads — VP Marketing ABM</span><span> <span class="conf">50%<span class="bar"><span style="width:50%"></span></span></span></span></div><div class='why'>Only 1.4 conv in 14d (&lt; 5); too little signal to adjust.</div></div></div>
+
+  <h2>Safety guardrails in force</h2>
+  <div class="panel"><ul class="rails">
+    <li><b>Pausing always needs human approval</b> — even in fully autonomous mode, the agent never pauses a campaign on its own.</li>
+    <li><b>Single budget moves capped at ±25%</b> — no campaign's budget can swing more than a quarter in one run.</li>
+    <li><b>Account budget ceiling</b> — total automatic budget increases are capped (≈+20%) to prevent runaway spend; anything beyond is held for approval.</li>
+    <li><b>New campaigns launch paused</b> — drafted creative and settings wait for a person to enable them.</li>
+    <li><b>Low-signal campaigns left alone</b> — the agent won't act on too few conversions to read reliably.</li>
+  </ul></div>
+
+  <h2>Human approval queue <span class="sub">— actions waiting on a person</span></h2>
+  <div class='panel'><table><thead><tr><th>Campaign</th><th>Platform</th><th>Recommendation</th><th class='num'>Conf.</th><th>Why approval is required</th></tr></thead><tbody><tr><td>Search — Competitor</td><td><span class='pill google'>google</span></td><td>pause <span class='move'>enabled → paused</span></td><td class='num'>85%</td><td class='why'>Pausing a campaign always requires human approval, even in auto mode.</td></tr><tr class='whyrow'><td colspan='5' class='why'>↳ CPA $106.22 is 3.5× target and ROAS 1.1 is far below 3.0. Pause and rework before it spends more.</td></tr><tr><td>Prospecting — Broad (new creative)</td><td><span class='pill meta'>meta</span></td><td>pause <span class='move'>enabled → paused</span></td><td class='num'>85%</td><td class='why'>Pausing a campaign always requires human approval, even in auto mode.</td></tr><tr class='whyrow'><td colspan='5' class='why'>↳ Spent $863.26 over 14d with zero conversions. Treat as a money-loser — pause and rework before it spends more.</td></tr></tbody></table></div>
+
+  <h2>New campaign draft <span class="sub">— created paused for review</span></h2>
+  <div class="panel">
+    <div><b>AuroraSleep Mattress — back-pain sufferers</b> &nbsp;<span class="pill meta">meta</span></div>
+    <div class="sub">Budget $75.00/day · target CPA $28.00 ·
+      status <b style="color:var(--warn)">PAUSED</b></div>
+    <div class="sub" style="margin-top:8px">Ad copy drafted for all three platforms,
+      each shaped to its own character limits:</div>
+    <div class='creative'><div class='ch'><span class='pill google'>google</span> <span style='color:var(--good);font-size:12px'>✓ within limits</span></div><div class='chips'><div class='cf'><span class='cflabel'>Headline 1</span><span class='h'>AuroraSleep Mattress for back…</span></div><div class='cf'><span class='cflabel'>Headline 2</span><span class='h'>Doctor-designed support</span></div><div class='cf'><span class='cflabel'>Headline 3</span><span class='h'>Meet AuroraSleep Mattress</span></div><div class='cf'><span class='cflabel'>Headline 4</span><span class='h'>100-night trial on AuroraSlee…</span></div><div class='cf'><span class='cflabel'>Headline 5</span><span class='h'>Why back-pain sufferers choos…</span></div><div class='cf'><span class='cflabel'>Description 1</span><span class='h'>AuroraSleep Mattress built for back-pain sufferers. Doctor-designed support. Shop now.</span></div><div class='cf'><span class='cflabel'>Description 2</span><span class='h'>100-night trial and trusted by thousands. Discover AuroraSleep Mattress today.</span></div><div class='cf'><span class='cflabel'>Description 3</span><span class='h'>Join back-pain sufferers who switched to AuroraSleep Mattress. Shop now.</span></div></div></div><div class='creative'><div class='ch'><span class='pill meta'>meta</span> <span style='color:var(--good);font-size:12px'>✓ within limits</span></div><div class='chips'><div class='cf'><span class='cflabel'>Primary text</span><span class='h'>AuroraSleep Mattress built for back-pain sufferers. Doctor-designed support and 100-night trial. Join thousands who made the…</span></div><div class='cf'><span class='cflabel'>Headline</span><span class='h'>Doctor-designed support — AuroraSleep M…</span></div><div class='cf'><span class='cflabel'>Call to action</span><span class='h'>Shop now</span></div></div></div><div class='creative'><div class='ch'><span class='pill linkedin'>linkedin</span> <span style='color:var(--good);font-size:12px'>✓ within limits</span></div><div class='chips'><div class='cf'><span class='cflabel'>Intro text</span><span class='h'>Back-pain sufferers: see why teams choose AuroraSleep Mattress. Doctor-designed support and 100-night trial.</span></div><div class='cf'><span class='cflabel'>Headline</span><span class='h'>AuroraSleep Mattress for back-pain sufferers</span></div><div class='cf'><span class='cflabel'>Description</span><span class='h'>Doctor-designed support. Trusted by thousands.</span></div></div></div>
+  </div>
+
+  <h2>Designed for future MCP integration <span class="sub">— how this connects to live ad platforms later</span></h2>
+  <div class="panel mcp">
+    <div class="row"><div class="k">Today</div><div class="v">Runs fully offline on simulated data — no API keys, no installs.</div></div>
+    <div class="row"><div class="k">The seam</div><div class="v">Every platform call goes through one interface (<code>platforms.py</code>). Swapping mock for live is a single, contained change.</div></div>
+    <div class="row"><div class="k">Read tools</div><div class="v"><code>get_campaigns</code> / <code>get_performance</code> map onto Synter Media, the official Google Ads MCP, or Meta/Pipeboard.</div></div>
+    <div class="row"><div class="k">Write tools</div><div class="v"><code>update_budget</code> / <code>update_bid</code> / <code>create_campaign</code> map onto the same MCP servers' write actions.</div></div>
+    <div class="row"><div class="k">Creative</div><div class="v">The image prompts route to Imagen 4, Flux, or Runway via a text-to-image tool.</div></div>
+    <div class="row"><div class="k">Recommended rollout</div><div class="v">Keep <code>dry_run</code> as default for the first weeks, review proposals, then grant <code>assist</code> and finally <code>auto</code>.</div></div>
+  </div>
+
+  <h2>Limitations</h2>
+  <div class="panel"><ul class="rails">
+    <li><b>Offline mock data.</b> Every number here is simulated for demonstration. It is not connected to any live ad account and reflects no real spend or performance.</li>
+    <li><b>Not production-ready.</b> This is an MVP that shows the agentic workflow and safety model — it is designed for, but not yet wired to, live MCP integrations.</li>
+    <li><b>No guaranteed outcomes.</b> "Estimated wasted spend" and "potential reallocation" are illustrative indications, not promised savings.</li>
+    <li><b>Transparent rules, not a learned model.</b> Decisions come from simple, explainable rules; a real deployment would validate them against live results before granting autonomy.</li>
+  </ul></div>
+
+  <div class="foot">Generated by the Agentic Advertising MVP · offline demo · simulated data.
+  Source patterns: github.com/jshorwitz/awesome-agentic-advertising</div>
+
+</div></body></html>
