@@ -1,1 +1,7 @@
-# Python dependencies will be added during implementation
+# The demo runs on the Python standard library only — no installs needed.
+# Python 3.10+ required (uses match-free | union type hints).
+#
+# Dependencies you'll add when going live (see README "Going live"):
+#   mcp                 # Model Context Protocol client
+#   anthropic           # LLM reasoning step for the agent brain
+#   python-dotenv       # load platform API keys from .env
