@@ -1,0 +1,95 @@
+{
+  "title": "AI Crew Organisation Demo",
+  "target_url": "https://example.com",
+  "demo_steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com/ai-crew-organisation",
+      "narration": "Welcome to the AI Crew organisation dashboard. This is where you can view and manage your team of AI agents.",
+      "wait": 2.0
+    },
+    {
+      "action": "scroll",
+      "direction": "down",
+      "pixels": 300,
+      "narration": "The dashboard shows all available crew members with their specializations and current status.",
+      "wait": 1.5
+    },
+    {
+      "action": "click",
+      "selector": "#crew-member-hermes",
+      "narration": "Let's start by clicking on Hermes, our communication specialist agent.",
+      "wait": 2.0
+    },
+    {
+      "action": "wait_for",
+      "selector": ".modal-profile",
+      "timeout": 5.0,
+      "narration": "A detailed profile modal appears showing Hermes' capabilities and performance metrics.",
+      "wait": 2.0
+    },
+    {
+      "action": "click",
+      "selector": ".modal-close",
+      "narration": "Now let's close this modal and check out another crew member.",
+      "wait": 1.0
+    },
+    {
+      "action": "click",
+      "selector": "#crew-member-darwin",
+      "narration": "Next, we'll view Darwin, our data analysis expert.",
+      "wait": 2.0
+    },
+    {
+      "action": "wait_for",
+      "selector": ".modal-profile",
+      "timeout": 5.0,
+      "narration": "Darwin specializes in pattern recognition and predictive analytics.",
+      "wait": 2.0
+    },
+    {
+      "action": "click",
+      "selector": ".modal-close",
+      "narration": "Closing Darwin's profile now.",
+      "wait": 1.0
+    },
+    {
+      "action": "click",
+      "selector": "#crew-member-lili",
+      "narration": "Finally, let's meet Lili, our creative content generation specialist.",
+      "wait": 2.0
+    },
+    {
+      "action": "wait_for",
+      "selector": ".modal-profile",
+      "timeout": 5.0,
+      "narration": "Lili can generate various types of creative content including text, images, and multimedia.",
+      "wait": 2.0
+    },
+    {
+      "action": "click",
+      "selector": ".modal-close",
+      "narration": "Closing the modal.",
+      "wait": 1.0
+    },
+    {
+      "action": "scroll",
+      "direction": "up",
+      "pixels": 300,
+      "narration": "Let's scroll back up to see the full crew overview.",
+      "wait": 1.5
+    },
+    {
+      "action": "click",
+      "selector": "#nav-dashboard",
+      "narration": "And now we'll return to the main dashboard to complete our tour.",
+      "wait": 2.0
+    }
+  ],
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "output_format": "mp4",
+  "voice_mode": "silent"
+}

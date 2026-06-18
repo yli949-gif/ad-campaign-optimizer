@@ -1,0 +1,9 @@
+# Video Demo Agent - DemoDSL 2.4.1 wrapper
+# Python 3.11+ required
+
+# Core DemoDSL with all dependencies
+demodsl==2.4.1
+
+# Additional dependencies for agent
+pydantic>=2.0,<3.0
+pyyaml>=6.0,<7.0

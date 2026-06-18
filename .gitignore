@@ -5,6 +5,7 @@ __pycache__/
 *.so
 .Python
 venv/
+.venv/
 env/
 *.egg-info/
 dist/
@@ -24,3 +25,9 @@ Thumbs.db
 *.log
 reports/*.html
 !reports/.gitkeep
+
+# Video demo agent
+tools/video_demo_agent/output/
+*.mp4
+*.webm
+*.gif
